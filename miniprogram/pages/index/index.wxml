@@ -1,0 +1,33 @@
+<!-- index.wxml -->
+<view class="container">
+  <!-- 教师信息 -->
+  <view class="teacher-info">
+    <image class="avatar" src="{{userInfo.avatarUrl || ''}}"></image>
+    <view class="teacher-details">
+      <text class="teacher-name">{{userInfo.nickName || '教师'}}</text>
+      <text class="teacher-subtitle">欢迎使用 Teachers Aide</text>
+    </view>
+  </view>
+  
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <view class="section-header">
+      <text class="section-title">快速操作</text>
+    </view>
+    
+    <view class="action-grid">
+      <view class="action-item" bindtap="goToSchedule">
+        <view class="action-icon schedule-icon">
+          <text>课表</text>
+        </view>
+        <text class="action-text">课程表</text>
+      </view>
+      <view class="action-item" bindtap="goToNotice">
+        <view class="action-icon notice-icon">
+          <text>通知</text>
+        </view>
+        <text class="action-text">发布通知</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,208 @@
+/* pages/schedule/schedule.wxss */
+.container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 20rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.add-btn {
+  background-color: #3478F6;
+  color: white;
+  border-radius: 40rpx;
+  padding: 0 30rpx;
+  font-size: 24rpx;
+}
+
+.schedule-table {
+  background-color: white;
+  border-radius: 10rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.table-header {
+  display: flex;
+  background-color: #f0f0f0;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.time-slot-header {
+  width: 120rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24rpx;
+  color: #333;
+  border-right: 1rpx solid #e0e0e0;
+}
+
+.day-header {
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24rpx;
+  color: #333;
+  border-right: 1rpx solid #e0e0e0;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.time-slot {
+  width: 120rpx;
+  padding: 30rpx 0;
+  text-align: center;
+  font-size: 22rpx;
+  color: #666;
+  border-right: 1rpx solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.course-cell {
+  flex: 1;
+  padding: 10rpx;
+  border-right: 1rpx solid #e0e0e0;
+  min-height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-cell:last-child {
+  border-right: none;
+}
+
+.course-info {
+  background-color: #e3f2fd;
+  border-radius: 5rpx;
+  padding: 10rpx;
+  width: 100%;
+  text-align: center;
+}
+
+.course-name {
+  display: block;
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 5rpx;
+}
+
+.course-location {
+  display: block;
+  font-size: 18rpx;
+  color: #666;
+}
+
+.empty-course {
+  width: 100%;
+  height: 100%;
+}
+
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-content {
+  background-color: white;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  width: 80%;
+  max-width: 500rpx;
+}
+
+.dialog-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.form-item {
+  margin-bottom: 20rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  border: 1rpx solid #e0e0e0;
+  border-radius: 5rpx;
+  padding: 15rpx;
+  font-size: 24rpx;
+}
+
+.form-picker {
+  border: 1rpx solid #e0e0e0;
+  border-radius: 5rpx;
+  padding: 15rpx;
+  font-size: 24rpx;
+  background-color: white;
+}
+
+.picker-view {
+  font-size: 24rpx;
+  color: #333;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30rpx;
+}
+
+.cancel-btn {
+  flex: 1;
+  margin-right: 10rpx;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 5rpx;
+}
+
+.confirm-btn {
+  flex: 1;
+  margin-left: 10rpx;
+  background-color: #3478F6;
+  color: white;
+  border-radius: 5rpx;
+}
