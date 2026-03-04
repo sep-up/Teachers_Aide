@@ -5,8 +5,10 @@ Page({
     showAddDialog: false,
     formData: {
       title: '',
-      content: ''
-    }
+      content: '',
+      images: []
+    },
+    tempImagePaths: []
   },
 
   onLoad() {
@@ -39,28 +41,8 @@ Page({
                 title: '获取通知列表失败',
                 icon: 'none'
               })
-              // 云函数调用成功但返回失败，使用本地数据
               this.setData({
-                notices: [
-                  {
-                    _id: '1',
-                    title: '家长会通知',
-                    content: '各位家长，本周六下午2点将召开家长会，请准时参加。',
-                    publishTime: '2026-03-01 10:00:00'
-                  },
-                  {
-                    _id: '2',
-                    title: '期中考试安排',
-                    content: '期中考试将于下周一至周三进行，请同学们做好准备。',
-                    publishTime: '2026-02-28 14:30:00'
-                  },
-                  {
-                    _id: '3',
-                    title: '春季运动会',
-                    content: '学校将于3月15日举行春季运动会，欢迎同学们积极报名参加。',
-                    publishTime: '2026-02-25 09:00:00'
-                  }
-                ]
+                notices: []
               })
             }
           },
@@ -71,28 +53,8 @@ Page({
               title: '获取通知列表失败',
               icon: 'none'
             })
-            // 云函数调用失败，使用本地数据
             this.setData({
-              notices: [
-                {
-                  _id: '1',
-                  title: '家长会通知',
-                  content: '各位家长，本周六下午2点将召开家长会，请准时参加。',
-                  publishTime: '2026-03-01 10:00:00'
-                },
-                {
-                  _id: '2',
-                  title: '期中考试安排',
-                  content: '期中考试将于下周一至周三进行，请同学们做好准备。',
-                  publishTime: '2026-02-28 14:30:00'
-                },
-                {
-                  _id: '3',
-                  title: '春季运动会',
-                  content: '学校将于3月15日举行春季运动会，欢迎同学们积极报名参加。',
-                  publishTime: '2026-02-25 09:00:00'
-                }
-              ]
+              notices: []
             })
           }
         })
@@ -103,54 +65,18 @@ Page({
           title: '获取通知列表失败',
           icon: 'none'
         })
-        // 云函数调用异常，使用本地数据
         this.setData({
-          notices: [
-            {
-              _id: '1',
-              title: '家长会通知',
-              content: '各位家长，本周六下午2点将召开家长会，请准时参加。',
-              publishTime: '2026-03-01 10:00:00'
-            },
-            {
-              _id: '2',
-              title: '期中考试安排',
-              content: '期中考试将于下周一至周三进行，请同学们做好准备。',
-              publishTime: '2026-02-28 14:30:00'
-            },
-            {
-              _id: '3',
-              title: '春季运动会',
-              content: '学校将于3月15日举行春季运动会，欢迎同学们积极报名参加。',
-              publishTime: '2026-02-25 09:00:00'
-            }
-          ]
+          notices: []
         })
       }
     } else {
       wx.hideLoading()
-      // 云开发未初始化，使用本地数据
+      wx.showToast({
+        title: '云开发未初始化',
+        icon: 'none'
+      })
       this.setData({
-        notices: [
-          {
-            _id: '1',
-            title: '家长会通知',
-            content: '各位家长，本周六下午2点将召开家长会，请准时参加。',
-            publishTime: '2026-03-01 10:00:00'
-          },
-          {
-            _id: '2',
-            title: '期中考试安排',
-            content: '期中考试将于下周一至周三进行，请同学们做好准备。',
-            publishTime: '2026-02-28 14:30:00'
-          },
-          {
-            _id: '3',
-            title: '春季运动会',
-            content: '学校将于3月15日举行春季运动会，欢迎同学们积极报名参加。',
-            publishTime: '2026-02-25 09:00:00'
-          }
-        ]
+        notices: []
       })
     }
   },
@@ -161,8 +87,10 @@ Page({
       showAddDialog: true,
       formData: {
         title: '',
-        content: ''
-      }
+        content: '',
+        images: []
+      },
+      tempImagePaths: []
     })
   },
 
@@ -182,8 +110,66 @@ Page({
     })
   },
 
+  // 选择图片
+  chooseImage() {
+    const maxImages = 9
+    const currentCount = this.data.tempImagePaths.length
+    
+    if (currentCount >= maxImages) {
+      wx.showToast({
+        title: '最多上传9张图片',
+        icon: 'none'
+      })
+      return
+    }
+    
+    wx.chooseImage({
+      count: maxImages - currentCount,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempFilePaths = res.tempFilePaths
+        this.setData({
+          tempImagePaths: [...this.data.tempImagePaths, ...tempFilePaths]
+        })
+      }
+    })
+  },
+  
+  // 删除图片
+  removeImage(e) {
+    const index = e.currentTarget.dataset.index
+    const tempImagePaths = this.data.tempImagePaths
+    tempImagePaths.splice(index, 1)
+    this.setData({
+      tempImagePaths: tempImagePaths
+    })
+  },
+  
+  // 上传图片到云存储
+  async uploadImages() {
+    const images = []
+    
+    for (let i = 0; i < this.data.tempImagePaths.length; i++) {
+      const filePath = this.data.tempImagePaths[i]
+      const cloudPath = `notices/${Date.now()}_${i}.${filePath.match(/\.(\w+)$/)[1]}`
+      
+      try {
+        const uploadResult = await wx.cloud.uploadFile({
+          cloudPath: cloudPath,
+          filePath: filePath
+        })
+        images.push(uploadResult.fileID)
+      } catch (err) {
+        console.error('上传图片失败', err)
+      }
+    }
+    
+    return images
+  },
+  
   // 发布通知
-  publishNotice() {
+  async publishNotice() {
     const { title, content } = this.data.formData
     
     if (!title || !content) {
@@ -198,6 +184,12 @@ Page({
       title: '发布中...'
     })
     
+    // 上传图片
+    let images = []
+    if (this.data.tempImagePaths.length > 0) {
+      images = await this.uploadImages()
+    }
+    
     wx.cloud.callFunction({
       name: 'notice',
       data: {
@@ -206,6 +198,7 @@ Page({
         data: {
           title: title,
           content: content,
+          images: images,
           publishTime: new Date()
         }
       },
@@ -213,7 +206,10 @@ Page({
         wx.hideLoading()
         console.log('发布通知成功', res)
         if (res.result.success) {
-          this.setData({ showAddDialog: false })
+          this.setData({ 
+            showAddDialog: false,
+            tempImagePaths: []
+          })
           this.getNotices()
           wx.showToast({
             title: '通知发布成功',

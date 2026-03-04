@@ -1,33 +1,107 @@
-<!-- index.wxml -->
 <view class="container">
-  <!-- 教师信息 -->
-  <view class="teacher-info">
-    <image class="avatar" src="{{userInfo.avatarUrl || ''}}"></image>
-    <view class="teacher-details">
-      <text class="teacher-name">{{userInfo.nickName || '教师'}}</text>
-      <text class="teacher-subtitle">欢迎使用 Teachers Aide</text>
+  <!-- 顶部欢迎栏 -->
+  <view class="welcome-bar">
+    <view class="welcome-text">
+      <text class="greeting">你好，{{userInfo.nickName || '教师'}}</text>
+      <text class="date-text">{{currentDate}}</text>
+    </view>
+    <view class="avatar-wrapper" bindtap="goToProfile">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" wx:if="{{userInfo.avatarUrl}}"></image>
+      <view class="avatar-placeholder" wx:else>
+        <text class="avatar-text">{{userInfo.nickName ? userInfo.nickName[0] : '教'}}</text>
+      </view>
     </view>
   </view>
   
-  <!-- 快速操作 -->
-  <view class="quick-actions">
-    <view class="section-header">
-      <text class="section-title">快速操作</text>
+  <!-- 本周课程表卡片 -->
+  <view class="week-schedule-card">
+    <view class="card-header">
+      <text class="card-title">本周课程</text>
+      <view class="header-actions">
+        <button class="action-btn add-btn" bindtap="addCourse" hover-class="btn-hover">+ 添加</button>
+        <button class="action-btn view-btn" bindtap="goToSchedule" hover-class="btn-hover">查看全部</button>
+      </view>
     </view>
     
-    <view class="action-grid">
-      <view class="action-item" bindtap="goToSchedule">
-        <view class="action-icon schedule-icon">
-          <text>课表</text>
+    <view class="mini-schedule">
+      <view wx:for="{{weekSchedule}}" wx:key="index" class="schedule-day" wx:if="{{item.courses.length > 0}}">
+        <view class="day-label">{{item.dayName}}</view>
+        <view class="day-courses">
+          <view wx:for="{{item.courses}}" wx:key="id" wx:for-item="course" 
+                class="mini-course" 
+                style="background-color: {{course.color}};"
+                bindtap="editCourseFromHome"
+                data-course="{{course}}"
+                hover-class="mini-course-hover">
+            <text class="mini-course-name" style="color: {{course.textColor}};">{{course.courseName}}</text>
+            <text class="mini-course-time">{{course.timeLabel}}</text>
+            <text wx:if="{{course.location}}" class="mini-course-location">{{course.location}}</text>
+          </view>
         </view>
-        <text class="action-text">课程表</text>
       </view>
-      <view class="action-item" bindtap="goToNotice">
-        <view class="action-icon notice-icon">
-          <text>通知</text>
-        </view>
-        <text class="action-text">发布通知</text>
+      <view wx:if="{{weekSchedule.length === 0 || !hasAnyCourse}}" class="no-course-tip">
+        <text class="tip-icon">📚</text>
+        <text class="tip-text">暂无课程安排</text>
+        <button class="tip-btn" bindtap="addCourse">添加第一节课</button>
       </view>
+    </view>
+  </view>
+</view>
+
+<!-- 添加/编辑课程弹窗 -->
+<view wx:if="{{showAddDialog}}" class="dialog-mask" catchtap="hideAddDialog">
+  <view class="dialog-content" catchtap="stopPropagation">
+    <text class="dialog-title">{{editMode ? '编辑课程' : '添加课程'}}</text>
+    <view class="form-item">
+      <text class="form-label">星期</text>
+      <picker class="form-picker" data-field="day" bindchange="handlePickerChange" value="{{formData.day}}" range="{{days}}">
+        <view class="picker-view">{{days[formData.day]}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">节次</text>
+      <picker class="form-picker" data-field="timeSlot" bindchange="handlePickerChange" value="{{formData.timeSlot}}" range="{{timeSlots}}">
+        <view class="picker-view">{{timeSlots[formData.timeSlot]}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">课程名称</text>
+      <input class="form-input" placeholder="请输入课程名称" data-field="courseName" bindinput="handleInput" value="{{formData.courseName}}" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">上课地点</text>
+      <input class="form-input" placeholder="请输入上课地点" data-field="location" bindinput="handleInput" value="{{formData.location}}" />
+    </view>
+    <view class="dialog-buttons">
+      <button class="dialog-btn cancel-btn" bindtap="hideAddDialog">取消</button>
+      <button class="dialog-btn confirm-btn" bindtap="addCourseSubmit">{{editMode ? '更新' : '保存'}}</button>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑名称弹窗 -->
+<view class="dialog-mask" wx:if="{{showEditDialog}}" catchtap="">
+  <view class="dialog-content" catchtap="stopPropagation">
+    <view class="dialog-title">完善个人信息</view>
+    
+    <!-- 头像选择 -->
+    <view class="avatar-section" bindtap="chooseAvatar">
+      <image class="avatar-preview" src="{{editAvatarUrl || userInfo.avatarUrl}}" wx:if="{{editAvatarUrl || userInfo.avatarUrl}}"></image>
+      <view class="avatar-preview-placeholder" wx:else>
+        <text class="avatar-preview-text">{{editNickName ? editNickName[0] : '教'}}</text>
+      </view>
+      <text class="avatar-tip">点击选择头像</text>
+    </view>
+    
+    <!-- 昵称输入 -->
+    <view class="nickname-section">
+      <text class="form-label">昵称</text>
+      <input class="dialog-input" placeholder="请输入昵称" value="{{editNickName}}" bindinput="onInputNickName" />
+    </view>
+    
+    <view class="dialog-buttons">
+      <button class="dialog-btn cancel-btn" bindtap="cancelEdit" wx:if="{{!isNewUser}}">取消</button>
+      <button class="dialog-btn confirm-btn" bindtap="confirmNickName">确定</button>
     </view>
   </view>
 </view>

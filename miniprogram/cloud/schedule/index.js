@@ -11,7 +11,8 @@ const db = cloud.database()
 // 云函数入口函数
 exports.main = async (event, context) => {
   const { action, data, openid } = event
-  
+  console.log('schedule云函数action, data, openid', action, data, openid)
+
   try {
     switch (action) {
       case 'create':
@@ -46,9 +47,10 @@ exports.main = async (event, context) => {
         
       case 'update':
         // 更新课程
-        const { id, ...updateData } = data
-        await db.collection('schedule').doc(id).update({
-          data: updateData
+        const { id: updateId } = event
+        const updateFields = data
+        await db.collection('schedule').doc(updateId).update({
+          data: updateFields
         })
         return {
           success: true
@@ -56,7 +58,7 @@ exports.main = async (event, context) => {
         
       case 'delete':
         // 删除课程（逻辑删除）
-        const { deleteId } = data
+        const { deleteId } = event
         await db.collection('schedule').doc(deleteId).update({
           data: {
             isDeleted: true

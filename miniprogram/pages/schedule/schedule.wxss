@@ -1,64 +1,96 @@
 /* pages/schedule/schedule.wxss */
 .container {
-  background-color: #f5f5f5;
+  background-color: #FAFAFA;
   min-height: 100vh;
-  padding: 20rpx;
+  padding: 32rpx;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20rpx;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #e0e0e0;
+  margin-bottom: 32rpx;
+  padding: 0;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
 }
 
 .title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #262626;
+}
+
+.week-picker {
+  background-color: #F0F7FF;
+  padding: 12rpx 24rpx;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+}
+
+.picker-display {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #5B8FF9;
+  font-weight: 500;
+}
+
+.picker-arrow {
+  font-size: 20rpx;
 }
 
 .add-btn {
-  background-color: #3478F6;
+  background-color: #5B8FF9;
   color: white;
-  border-radius: 40rpx;
-  padding: 0 30rpx;
-  font-size: 24rpx;
+  border-radius: 48rpx;
+  padding: 16rpx 40rpx;
+  font-size: 28rpx;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(91, 143, 249, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-hover {
+  opacity: 0.8;
+  transform: scale(0.96);
 }
 
 .schedule-table {
   background-color: white;
-  border-radius: 10rpx;
+  border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
 }
 
 .table-header {
   display: flex;
-  background-color: #f0f0f0;
-  border-bottom: 1rpx solid #e0e0e0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: none;
 }
 
 .time-slot-header {
   width: 120rpx;
-  padding: 20rpx 0;
+  padding: 24rpx 0;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 24rpx;
-  color: #333;
-  border-right: 1rpx solid #e0e0e0;
+  color: white;
+  border-right: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
 .day-header {
   flex: 1;
-  padding: 20rpx 0;
+  padding: 24rpx 0;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 24rpx;
-  color: #333;
-  border-right: 1rpx solid #e0e0e0;
+  color: white;
+  border-right: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
 .day-header:last-child {
@@ -67,7 +99,7 @@
 
 .table-row {
   display: flex;
-  border-bottom: 1rpx solid #e0e0e0;
+  border-bottom: 1rpx solid #F5F5F5;
 }
 
 .table-row:last-child {
@@ -76,19 +108,20 @@
 
 .time-slot {
   width: 120rpx;
-  padding: 30rpx 0;
+  padding: 32rpx 0;
   text-align: center;
-  font-size: 22rpx;
-  color: #666;
-  border-right: 1rpx solid #e0e0e0;
-  background-color: #fafafa;
+  font-size: 24rpx;
+  color: #8C8C8C;
+  border-right: 1rpx solid #F5F5F5;
+  background-color: #FAFAFA;
+  font-weight: 500;
 }
 
 .course-cell {
   flex: 1;
-  padding: 10rpx;
-  border-right: 1rpx solid #e0e0e0;
-  min-height: 120rpx;
+  padding: 12rpx;
+  border-right: 1rpx solid #F5F5F5;
+  min-height: 140rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,25 +132,30 @@
 }
 
 .course-info {
-  background-color: #e3f2fd;
-  border-radius: 5rpx;
-  padding: 10rpx;
+  border-radius: 12rpx;
+  padding: 16rpx 12rpx;
   width: 100%;
   text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.course-cell:active .course-info {
+  opacity: 0.85;
+  transform: scale(0.95);
 }
 
 .course-name {
   display: block;
-  font-size: 22rpx;
-  font-weight: bold;
-  color: #1976d2;
-  margin-bottom: 5rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
 }
 
 .course-location {
   display: block;
-  font-size: 18rpx;
-  color: #666;
+  font-size: 20rpx;
+  color: #8C8C8C;
 }
 
 .empty-course {
@@ -131,78 +169,144 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .dialog-content {
   background-color: white;
-  border-radius: 10rpx;
-  padding: 30rpx;
-  width: 80%;
-  max-width: 500rpx;
+  border-radius: 20rpx;
+  padding: 48rpx;
+  width: 85%;
+  max-width: 600rpx;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .dialog-title {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 32rpx;
   text-align: center;
 }
 
 .form-item {
-  margin-bottom: 20rpx;
+  margin-bottom: 28rpx;
 }
 
 .form-label {
   display: block;
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 10rpx;
+  font-size: 28rpx;
+  color: #8C8C8C;
+  margin-bottom: 12rpx;
+  font-weight: 500;
 }
 
 .form-input {
-  border: 1rpx solid #e0e0e0;
-  border-radius: 5rpx;
-  padding: 15rpx;
-  font-size: 24rpx;
+  border: 2rpx solid #F0F0F0;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  background-color: #FAFAFA;
+}
+
+.form-input:focus {
+  border-color: #5B8FF9;
+  background-color: #FFFFFF;
 }
 
 .form-picker {
-  border: 1rpx solid #e0e0e0;
-  border-radius: 5rpx;
-  padding: 15rpx;
-  font-size: 24rpx;
-  background-color: white;
+  border: 2rpx solid #F0F0F0;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  background-color: #FAFAFA;
 }
 
 .picker-view {
-  font-size: 24rpx;
-  color: #333;
+  font-size: 28rpx;
+  color: #262626;
 }
 
 .dialog-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 30rpx;
+  margin-top: 40rpx;
+  gap: 20rpx;
 }
 
 .cancel-btn {
   flex: 1;
-  margin-right: 10rpx;
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 5rpx;
+  background-color: #F5F5F5;
+  color: #8C8C8C;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:active {
+  background-color: #E8E8E8;
 }
 
 .confirm-btn {
   flex: 1;
-  margin-left: 10rpx;
-  background-color: #3478F6;
+  background-color: #5B8FF9;
   color: white;
-  border-radius: 5rpx;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.confirm-btn:active {
+  opacity: 0.8;
+}
+
+.detail-dialog {
+  max-width: 600rpx;
+}
+
+.detail-item {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background-color: #FAFAFA;
+  border-radius: 12rpx;
+}
+
+.detail-label {
+  display: block;
+  font-size: 24rpx;
+  color: #8C8C8C;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.detail-value {
+  display: block;
+  font-size: 32rpx;
+  color: #262626;
+  font-weight: 600;
 }

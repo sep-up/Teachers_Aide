@@ -1,2 +1,66 @@
-<!--pages/profile/profile.wxml-->
-<text>pages/profile/profile.wxml</text>
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="profile-header">
+    <view class="avatar-container">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" wx:if="{{userInfo.avatarUrl}}"></image>
+      <view class="avatar-placeholder" wx:else>
+        <text class="avatar-text">{{userInfo.nickName ? userInfo.nickName[0] : '教'}}</text>
+      </view>
+    </view>
+    <text class="user-name">{{userInfo.nickName || '教师'}}</text>
+    <button class="edit-btn" bindtap="editNickName" hover-class="edit-btn-hover" hover-stay-time="100">编辑昵称</button>
+  </view>
+  
+  <!-- 统计数据卡片 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-number">{{stats.noticeCount}}</text>
+      <text class="stat-label">已发布通知</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{stats.scheduleCount}}</text>
+      <text class="stat-label">课程数量</text>
+    </view>
+  </view>
+  
+  <!-- 个人信息卡片 -->
+  <view class="info-card">
+    <view class="info-title">个人信息</view>
+    <view class="info-item">
+      <text class="info-label">昵称</text>
+      <text class="info-value">{{userInfo.nickName || '未设置'}}</text>
+    </view>
+    <view class="info-item" wx:if="{{userInfo.openid}}">
+      <text class="info-label">用户ID</text>
+      <text class="info-value">{{userInfo.openid.slice(0, 8)}}...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑昵称弹窗 -->
+<view class="dialog-mask" wx:if="{{showEditDialog}}" catchtap="">
+  <view class="dialog-content" catchtap="stopPropagation">
+    <view class="dialog-title">修改个人信息</view>
+    
+    <!-- 头像选择 -->
+    <view class="avatar-section" bindtap="chooseAvatar">
+      <image class="avatar-preview" src="{{editAvatarUrl || userInfo.avatarUrl}}" wx:if="{{editAvatarUrl || userInfo.avatarUrl}}"></image>
+      <view class="avatar-preview-placeholder" wx:else>
+        <text class="avatar-preview-text">{{editNickName ? editNickName[0] : '教'}}</text>
+      </view>
+      <text class="avatar-tip">点击选择头像</text>
+    </view>
+    
+    <!-- 昵称输入 -->
+    <view class="nickname-section">
+      <text class="form-label">昵称</text>
+      <input class="dialog-input" placeholder="请输入昵称" value="{{editNickName}}" bindinput="onInputNickName" />
+    </view>
+    
+    <view class="dialog-buttons">
+      <button class="dialog-btn cancel-btn" bindtap="cancelEdit">取消</button>
+      <button class="dialog-btn confirm-btn" bindtap="confirmNickName">确定</button>
+    </view>
+  </view>
+</view>

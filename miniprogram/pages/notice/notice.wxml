@@ -3,7 +3,7 @@
   <!-- 顶部标题栏 -->
   <view class="header">
     <text class="title">通知管理</text>
-    <button class="add-btn" bindtap="addNotice">发布通知</button>
+    <button class="add-btn" bindtap="addNotice" hover-class="btn-hover" hover-stay-time="100">发布通知</button>
   </view>
   
   <!-- 通知列表 -->
@@ -15,8 +15,11 @@
           <text class="notice-time">{{item.publishTime}}</text>
         </view>
         <text class="notice-content">{{item.content}}</text>
+        <view wx:if="{{item.images && item.images.length > 0}}" class="notice-images">
+          <image wx:for="{{item.images}}" wx:key="index" wx:for-item="img" class="notice-image" src="{{img}}" mode="aspectFill"></image>
+        </view>
         <view class="notice-footer">
-          <button class="share-btn" bindtap="shareToWeChat" data-noticeid="{{item._id}}">转发到微信群</button>
+          <button class="share-btn" bindtap="shareToWeChat" data-noticeid="{{item._id}}" hover-class="share-btn-hover" hover-stay-time="100">转发到微信群</button>
         </view>
       </view>
     </block>
@@ -26,8 +29,8 @@
   </view>
   
   <!-- 添加通知对话框 -->
-  <view wx:if="{{showAddDialog}}" class="dialog-mask" bindtap="hideAddDialog">
-    <view class="dialog-content" bindtap="stopPropagation">
+  <view wx:if="{{showAddDialog}}" class="dialog-mask" catchtap="hideAddDialog">
+    <view class="dialog-content" catchtap="stopPropagation">
       <text class="dialog-title">发布通知</text>
       <view class="form-item">
         <text class="form-label">标题</text>
@@ -36,6 +39,18 @@
       <view class="form-item">
         <text class="form-label">内容</text>
         <textarea class="form-textarea" placeholder="请输入通知内容" data-field="content" bindinput="handleInput" value="{{formData.content}}" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">图片（最多9张）</text>
+        <view class="image-picker">
+          <view wx:for="{{tempImagePaths}}" wx:key="index" class="image-item">
+            <image class="preview-image" src="{{item}}" mode="aspectFill"></image>
+            <view class="remove-image" bindtap="removeImage" data-index="{{index}}">×</view>
+          </view>
+          <view wx:if="{{tempImagePaths.length < 9}}" class="add-image-btn" bindtap="chooseImage">
+            <text class="add-image-icon">+</text>
+          </view>
+        </view>
       </view>
       <view class="dialog-buttons">
         <button class="cancel-btn" bindtap="hideAddDialog">取消</button>

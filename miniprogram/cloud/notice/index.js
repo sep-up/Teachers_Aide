@@ -13,15 +13,17 @@ exports.main = async (event, context) => {
   const { action, data, openid } = event
   
   try {
+      console.log('notice云函数action, data, openid', action, data, openid)
     switch (action) {
       case 'create':
         // 创建通知
-        const { title, content, publishTime } = data
+        const { title, content, publishTime, images } = data
         const newNotice = await db.collection('notices').add({
           data: {
             openid: openid,
             title: title,
             content: content,
+            images: images || [],
             publishTime: publishTime,
             createTime: new Date(),
             isDeleted: false

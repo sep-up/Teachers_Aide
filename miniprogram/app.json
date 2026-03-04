@@ -7,15 +7,16 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#3478F6",
+    "navigationBarBackgroundColor": "#5B8FF9",
     "navigationBarTitleText": "Teachers Aide",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FAFAFA"
   },
   "tabBar": {
-    "color": "#757575",
-    "selectedColor": "#3478F6",
+    "color": "#8C8C8C",
+    "selectedColor": "#5B8FF9",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
